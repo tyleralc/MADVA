@@ -15,17 +15,13 @@ def main():
     st.title('MADVA')
     st.header('Master\'s in Applied Data Science Vitual Advisor')
     st.subheader('By Tyler Alcorn and Chaimi Lee')
-    st.write("This app that helps USC students who are pursuing a Master's degree in Applied Data Science schedule and register for DSCI courses based on their interests and degree progress.")
+    st.write("This an app that helps USC students who are pursuing a Master's degree in Applied Data Science schedule and register for DSCI courses based on their interests and degree progress.")
     
-
-
-    # with usc_courses:
+    # with usc_courses: get the courses dataframe 
     st.header('DSCI Courses')
-    #insert a table with all the coureses laid out
-    #include the professors who are 
-    #example with an old dataframe
-    italy= pd.read_csv("Italy_dataframe.csv")
-    st.write(italy.head())
+    html = pd.read_html('https://classes.usc.edu/term-20221/classes/dsci/', header = 0)
+    courses = html[0]
+    st.write(courses)
 
     # with road_map:
     st.header("Road Map to Graduation")
