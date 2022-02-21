@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
-from lxml import etree
-import sys 
-import requests 
+import sys
 
 def main():
 
