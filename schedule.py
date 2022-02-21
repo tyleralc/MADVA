@@ -12,5 +12,4 @@ def scrap_courses(url):
     return df 
 if __name__ == '__main__':
     k=sys.argv[1]
-    scrap(k)
-
+    scrap_courses(k)
