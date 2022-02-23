@@ -9,6 +9,9 @@
 
 # FIRST: Run the app, interact with it, and then come back and go through the code
 
+
+
+
 # TO RUN THE APP:
 #	* open terminal
 #	* navigate to streamlit file location

@@ -5,6 +5,10 @@ from bs4 import BeautifulSoup
 import pandas as pd
 
 
+
+
+
+
 def scrap_courses(url):
     html = pd.read_html(url, header = 0)
     df = html[0]
