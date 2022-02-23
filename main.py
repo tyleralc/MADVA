@@ -23,9 +23,9 @@ def main():
     
     # with usc_courses: get the courses dataframe 
     st.header('DSCI Courses')
-    html = pd.read_html('https://classes.usc.edu/term-20221/classes/dsci/', header = 0)
-    courses = html[0]
-    st.write(courses)
+    # html = pd.read_html('https://classes.usc.edu/term-20221/classes/dsci/', header = 0)
+    # courses = html[0]
+    # st.write(courses)
 
     # with road_map:
     st.header("Road Map to Graduation")
