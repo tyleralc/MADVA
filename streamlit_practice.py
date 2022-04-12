@@ -38,7 +38,6 @@ def main():
     st.write("")
 
     # with functions:
-    
     st.header("Functions")
 
     # with motiv:
