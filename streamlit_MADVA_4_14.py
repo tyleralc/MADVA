@@ -122,6 +122,107 @@ def course_info_dict(year,semester,subject,pandas_df):
         
     return course_info_dict
 
+def first_sem():
+    courses_taken_dict={}
+    courses_list_indiv=['None','DSCI 510', 'DSCI 529', 'DSCI 544', 'DSCI 549', 'DSCI 550', 'CSCI 550', 'DSCI 551','DSCI 552','DSCI 553','DSCI 554','DSCI 555', 'DSCI 556', 'DSCI 558', 'DSCI 560','DSCI 561','DSCI 562', 'DSCI 564', 'CSCI 570', 'CSCI 572', 'CSCI 587', 'DSCI 599','Other']
+    courses_taken_1=st.multiselect('Which DSCI/CSCI courses have you taken during your first semester?',courses_list_indiv, default=['None'])
+    courses_taken_dict[1]=courses_taken_1
+    
+    return courses_taken_dict
+
+def second_sem():
+    courses_taken_dict={}
+    courses_list_indiv=['None','DSCI 510', 'DSCI 529', 'DSCI 544', 'DSCI 549', 'DSCI 550', 'CSCI 550', 'DSCI 551','DSCI 552','DSCI 553','DSCI 554','DSCI 555', 'DSCI 556', 'DSCI 558', 'DSCI 560','DSCI 561','DSCI 562', 'DSCI 564', 'CSCI 570', 'CSCI 572', 'CSCI 587', 'DSCI 599','Other']
+    courses_taken_1=st.multiselect('Which DSCI/CSCI courses have you taken during your first semester?',courses_list_indiv, default=['None'])
+    courses_taken_dict[1]=courses_taken_1
+
+    #for element in courses_taken_1:
+       # if element != 'Other' or element != 'None':
+           # courses_list_indiv.remove(element)
+    courses_taken_2=st.multiselect('Which DSCI/CSCI courses have you taken during your second semester?',courses_list_indiv, default=['None'])
+    courses_taken_dict[2]=courses_taken_2
+    return courses_taken_dict
+
+def third_sem():
+    courses_taken_dict={}
+    courses_list_indiv=['None','DSCI 510', 'DSCI 529', 'DSCI 544', 'DSCI 549', 'DSCI 550', 'CSCI 550', 'DSCI 551','DSCI 552','DSCI 553','DSCI 554','DSCI 555', 'DSCI 556', 'DSCI 558', 'DSCI 560','DSCI 561','DSCI 562', 'DSCI 564', 'CSCI 570', 'CSCI 572', 'CSCI 587', 'DSCI 599','Other']
+    courses_taken_1=st.multiselect('Which DSCI/CSCI courses have you taken during your first semester?',courses_list_indiv, default=['None'])
+    courses_taken_dict[1]=courses_taken_1
+
+            
+    courses_taken_2=st.multiselect('Which DSCI/CSCI courses have you taken during your second semester?',courses_list_indiv, default=['None'])
+    courses_taken_dict[2]=courses_taken_2
+
+            
+    courses_taken_3=st.multiselect('Which DSCI/CSCI courses have you taken during your third semester?',courses_list_indiv, default=['None'])
+    courses_taken_dict[3]=courses_taken_3
+    
+    return courses_taken_dict
+
+def fourth_sem():
+    courses_taken_dict={}
+    courses_list_indiv=['None','DSCI 510', 'DSCI 529', 'DSCI 544', 'DSCI 549', 'DSCI 550', 'CSCI 550', 'DSCI 551','DSCI 552','DSCI 553','DSCI 554','DSCI 555', 'DSCI 556', 'DSCI 558', 'DSCI 560','DSCI 561','DSCI 562', 'DSCI 564', 'CSCI 570', 'CSCI 572', 'CSCI 587', 'DSCI 599','Other']
+    courses_taken_1=st.multiselect('Which DSCI/CSCI courses have you taken during your first semester?',courses_list_indiv, default=['None'])
+    courses_taken_dict[1]=courses_taken_1
+
+            
+    courses_taken_2=st.multiselect('Which DSCI/CSCI courses have you taken during your second semester?',courses_list_indiv, default=['None'])
+    courses_taken_dict[2]=courses_taken_2
+
+            
+    courses_taken_3=st.multiselect('Which DSCI/CSCI courses have you taken during your third semester?',courses_list_indiv, default=['None'])
+    courses_taken_dict[3]=courses_taken_3
+            
+    courses_taken_4=st.multiselect('Which DSCI/CSCI courses have you taken during your fourth semester?',courses_list_indiv, default=['None'])
+    courses_taken_dict[4]=courses_taken_4   
+    
+    return courses_taken_dict
+
+def fifth_sem():
+    courses_taken_dict={}
+    courses_list_indiv=['None','DSCI 510', 'DSCI 529', 'DSCI 544', 'DSCI 549', 'DSCI 550', 'CSCI 550', 'DSCI 551','DSCI 552','DSCI 553','DSCI 554','DSCI 555', 'DSCI 556', 'DSCI 558', 'DSCI 560','DSCI 561','DSCI 562', 'DSCI 564', 'CSCI 570', 'CSCI 572', 'CSCI 587', 'DSCI 599','Other']
+    courses_taken_1=st.multiselect('Which DSCI/CSCI courses have you taken during your first semester?',courses_list_indiv, default=['None'])
+    courses_taken_dict[1]=courses_taken_1
+            
+    courses_taken_2=st.multiselect('Which DSCI/CSCI courses have you taken during your second semester?',courses_list_indiv, default=['None'])
+    courses_taken_dict[2]=courses_taken_2
+            
+    courses_taken_3=st.multiselect('Which DSCI/CSCI courses have you taken during your third semester?',courses_list_indiv, default=['None'])
+    courses_taken_dict[3]=courses_taken_3
+            
+    courses_taken_4=st.multiselect('Which DSCI/CSCI courses have you taken during your fourth semester?',courses_list_indiv, default=['None'])
+    courses_taken_dict[4]=courses_taken_4 
+
+    
+    courses_taken_5=st.multiselect('Which DSCI/CSCI courses have you taken during your fifth semester?',courses_list_indiv, default=['None'])
+    courses_taken_dict[5]=courses_taken_5
+    
+    return courses_taken_dict
+
+def beyond_fifth_sem():
+    courses_taken_dict={}
+    courses_list_indiv=['None','DSCI 510', 'DSCI 529', 'DSCI 544', 'DSCI 549', 'DSCI 550', 'CSCI 550', 'DSCI 551','DSCI 552','DSCI 553','DSCI 554','DSCI 555', 'DSCI 556', 'DSCI 558', 'DSCI 560','DSCI 561','DSCI 562', 'DSCI 564', 'CSCI 570', 'CSCI 572', 'CSCI 587', 'DSCI 599','Other']
+    courses_taken_1=st.multiselect('Which DSCI/CSCI courses have you taken during your first semester?',courses_list_indiv, default=['None'])
+    courses_taken_dict[1]=courses_taken_1
+            
+    courses_taken_2=st.multiselect('Which DSCI/CSCI courses have you taken during your second semester?',courses_list_indiv, default=['None'])
+    courses_taken_dict[2]=courses_taken_2
+            
+    courses_taken_3=st.multiselect('Which DSCI/CSCI courses have you taken during your third semester?',courses_list_indiv, default=['None'])
+    courses_taken_dict[3]=courses_taken_3
+            
+    courses_taken_4=st.multiselect('Which DSCI/CSCI courses have you taken during your fourth semester?',courses_list_indiv, default=['None'])
+    courses_taken_dict[4]=courses_taken_4 
+
+    
+    courses_taken_5=st.multiselect('Which DSCI/CSCI courses have you taken during your fifth semester?',courses_list_indiv, default=['None'])
+    courses_taken_dict[5]=courses_taken_5
+
+    courses_taken_6=st.multiselect('Which DSCI/CSCI courses have you taken after your fifth semester?-- choose all courses taken since fifth semester',courses_list_indiv, default=['None'])
+    courses_taken_dict[6]=courses_taken_6
+    
+    return courses_taken_dict
+
 
 def main():
     header= st.beta_container
@@ -175,9 +276,9 @@ def main():
     background_info=st.selectbox('What is your undergraduate and/or professional background in?',list_of_backgrounds)
 
     #class standing
-    class_standing=st.radio('Which semester are you currently in?', ('incomming student', 
+    class_standing=st.radio('Which semester are you currently in?', ('Incomming Student', 
                                                                      '1st Semester', '2nd Semester', '3rd Semester',
-                                                                     '4th Semester', '5th semester', 'beyond 5th semester'))
+                                                                     '4th Semester', '5th Semester', 'Beyond 5th Semester'))
 
     if class_standing=='3rd Semester'or class_standing=='4th Semester' or class_standing=='5th semester' or class_standing=='beyond 5th semester':
         grad_or_no=st.radio('Will you be graduating after this semester?', ('Yes', 'No'))
@@ -187,31 +288,21 @@ def main():
     #waied courses
     waived_courses=st.multiselect('Have you waived out of/got credit for any of these elective courses?', ['None','DSCI 510', 'DSCI 529', 'DSCI 544', 'DSCI 549', 'DSCI 550', 'CSCI 550', 'DSCI 554','DSCI 555', 'DSCI 556', 'DSCI 558', 'DSCI 560','DSCI 561','DSCI 562', 'DSCI 564', 'CSCI 570', 'CSCI 572', 'CSCI 587', 'DSCI 599','Other'])
 
-    #courses taken
-    if class_standing=='beyond 5th semester':
-        num_semester_input=st.radio('Which semester are you in?', ('6th', '7th','8th','9th','10th'))
-        num_semester=str(num_semester_input)[:1]
-    elif class_standing=='incomming student':
-        num_semester=0
-    else:
-        num_semester=str(class_standing)[:1]
-
-    courses_list_indiv=['None','DSCI 510', 'DSCI 529', 'DSCI 544', 'DSCI 549', 'DSCI 550', 'CSCI 550', 'DSCI 551','DSCI 552','DSCI 553','DSCI 554','DSCI 555', 'DSCI 556', 'DSCI 558', 'DSCI 560','DSCI 561','DSCI 562', 'DSCI 564', 'CSCI 570', 'CSCI 572', 'CSCI 587', 'DSCI 599','Other','None']
-
-    courses_taken_dict={}
-    num=int(num_semester)
-    num_display=1
-    #while loop not as good
-    while num !=0:
-        courses_taken_dict={}
-        courses_taken=st.multiselect('Which DSCI/CSCI courses have you taken during semester '+str(num_display)+'?',courses_list_indiv, default=['None'])
-        courses_taken_dict[num]=courses_taken
-
-        for element in courses_taken:
-            if element != 'Other':
-                courses_list_indiv.remove(element)
-        num=num-1
-        num_display=num_display+1
+    if class_standing=='1st Semester':
+        courses_taken=first_sem()
+    elif class_standing=='2nd Semester':
+        courses_taken=second_sem()
+    elif class_standing=='3rd Semester':
+        courses_taken=third_sem()
+    elif class_standing=='4th Semester':
+        courses_taken=fourth_sem()
+    elif class_standing=='5th Semester':
+        courses_taken=fifth_sem()
+    elif class_standing=='Beyond 5th Semester':
+        courses_taken=beyond_fifth_sem()
+    elif class_standing=='Incomming Student':
+        courses_taken={}
+    
     #interests
     list_of_interest=['None','Geospatial Data','Data Processing', 'Data Cleaning','Data Analysis','Big Data','Data Engineering', 'Data Analytics', 'Data Modeling','Natural Language Processing (NLP)', 'Data Visualization', 'Algorithms', 'Data Mining', 'Machine Learning (ML)', 'Database Systems', 'Artificial Intelligence (AI)', 'Data Management', 'Probability and Statistics']
     list_of_interest=sorted(list_of_interest)
@@ -223,7 +314,7 @@ def main():
     input_dict['Class standing']=class_standing
     input_dict['Graduating']=grad_or_no
     input_dict['Waived courses']=waived_courses
-    input_dict['Courses taken']=courses_taken_dict
+    input_dict['Courses taken']=courses_taken
     input_dict['Interests']=interests
     data={}
     data[usc_email]=input_dict
