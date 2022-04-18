@@ -321,6 +321,25 @@ def main():
 
     st.write(data)
 
+    if class_standing!='Incomming Student':
+        all_courses=[]
+        all_reviews=[]
+        for lists in input_dict["Courses taken"].values():
+            for element in lists:
+                all_courses.append(element)
+
+        review_or_no=st.multiselect("Would you like to leave a review about any of these courses?: ",all_courses,default=[all_courses[0]])
+        for classes in review_or_no:
+            review_dict={}
+            outer_dict={}
+            review=st.text_input("What did you think about "+str(classes)+"?")
+            recommend_or_not=st.radio("Do you recommend this course?",('Yes','No'),key=classes)
+            review_dict['Review']=review
+            review_dict['Recommend']=recommend_or_not
+            outer_dict[classes]=review_dict
+            all_reviews.append(outer_dict)
+        st.write(all_reviews)
+        
     
     #st.write('You selected: ', interests)
 if __name__ == '__main__':
