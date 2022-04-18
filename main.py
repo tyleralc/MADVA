@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import sys
-from lxml import etree
+#from lxml import etree
 import requests
 import json
 from bs4 import BeautifulSoup
