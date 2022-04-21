@@ -11,6 +11,7 @@ from lxml import etree
 import requests
 import json
 from bs4 import BeautifulSoup
+import random
 
 def about_ADSCI():
     content = requests.get('https://catalogue.usc.edu/preview_program.php?catoid=14&poid=17593&returnto=5199')
@@ -222,6 +223,56 @@ def beyond_fifth_sem():
     
     return courses_taken_dict
 
+#get percentage of people who recommend a course
+def how_many_recommend(course):
+    response = requests.get('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Courses/'+str(course)+'/Recommend/.json?orderBy="$key"').json()
+    recs=[]
+    yes=[]
+    for values in response.values():
+        recs.append(values)
+    for resp in recs:
+        if resp=='Yes':
+            yes.append(resp)
+    return len(yes)/len(recs)*100
+
+def get_reviews(course,num):
+    try:
+        response = requests.get('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Courses/'+str(course)+'/Review/.json?orderBy="$key"').json()
+        reviews=[]
+        for values in response.values():
+            reviews.append(values)  
+        leng=len(reviews)
+        try:
+            randomlist = random.sample(range(0, leng), num)
+            
+            for count,i in enumerate(randomlist):
+                count_disp=count+1
+                st.write(str(count_disp)+'. '+str(reviews[i]))
+        except:
+            st.write('Not enough info available!')
+    except:
+        st.write('Not enough info available!')
+
+def get_emails(course,num):
+    response = requests.get('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Students/.json?orderBy="$key"').json()
+    emails=[]
+    for key,dictionary in response.items():
+        email=key+'@usc.edu'
+        if course in dictionary['Courses Total']:
+            emails.append(email)
+    leng=len(emails)
+    try:
+        randomlist = random.sample(range(0, leng), num)
+        print(randomlist)
+        print(emails)
+        
+        for count,i in enumerate(randomlist):
+            count_disp=count+1
+            #print(str(count_disp))
+            st.write(str(emails[i]))
+    except:
+        st.write('Not enough info available!')
+
 
 def main():
     header= st.beta_container
@@ -237,6 +288,9 @@ def main():
 
     st.subheader("Motivations")
     st.write("Our motivation for creating MADVA (Master's in Applied Data science Virtual Advisor) was to help our fellow Applied Data Science students avoid these obstacles and better prepare ourselves for the coming semester and achieve our career goals. This app would significantly reduce stress during registration periods and help students plan future courses based on their interests and other students\' experiences. This app would also be helpful for students who have less flexible schedules due to jobs, being in a different time zone, etc. With MADVA, our goal is to ensure that current and future DSCI students make the best out of their educational journey at USC.")
+
+    #####
+    ###get_reviews('DSCI 551',3)
 
     st.subheader('MS in Applied Data Science at USC')
     st.write(about_ADSCI())
@@ -316,15 +370,23 @@ def main():
     input_dict['Waived courses']=waived_courses
     input_dict['Courses taken']=courses_taken
     input_dict['Interests']=interests
+    all_courses=[]
+    for lists in input_dict["Courses taken"].values():
+        for element in lists:
+            all_courses.append(element)
+    input_dict['Courses Total']=all_courses
+        
 
     if data_final=='Yes':
         data={}
         personal_data={}
         usc_email_key=usc_email.replace('@usc.edu','')
         personal_data[usc_email_key]=input_dict
-        data['USC Students']=personal_data
-        out=json.dumps(data, indent=4)
-        response = requests.patch('https://project-practice-8f9b2-default-rtdb.firebaseio.com/.json',out)
+        ##this is onl for creating the first key
+        #data['USC_Students']=personal_data
+        #out=json.dumps(data, indent=4)
+        out=json.dumps(personal_data, indent=4)
+        response = requests.patch('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Students.json',out)
         
 
     #st.write(data)
@@ -335,34 +397,66 @@ def main():
         for lists in input_dict["Courses taken"].values():
             for element in lists:
                 all_courses.append(element)
+        all_courses.append('None')
 
         review_or_no=st.multiselect("Would you like to leave a review about any of these courses? If so, which courses would you like to write a review about?: ",all_courses,default=[all_courses[0]])
 
-        data_2={}
-        dict_with_course={}
-        for classes in review_or_no:
-    
-            review_dict={}
-            review=st.text_input("What did you think about "+str(classes)+"?")
-            recommend_or_not=st.radio("Do you recommend this course?",('Yes','No'),key=classes)
-        
-            review_dict['Review']=review
-            review_dict['Recommend']=recommend_or_not
-            dict_with_course[classes]=review_dict
-            
-            #all_reviews.append(data_2)
-        data_2['USC Courses']=dict_with_course
+        if review_or_no!=['None']:
+            if ('None' in review_or_no):
+                review_or_no.remove('None')
 
-        review_final=st.radio('Are you sure about your reviews?',('No','Yes'))
-        if review_final=='Yes':
-            out_2=json.dumps(data_2, indent=4)
-            response = requests.patch('https://project-practice-8f9b2-default-rtdb.firebaseio.com/.json',out_2)
-                ##make sure not to overwrite and just add new data
+            reviews_list=[]
+            recommend_list=[]
+            for classes in review_or_no:
+                
+                review=st.text_input("What did you think about "+str(classes)+"?")
+                recommend_or_not=st.radio("Do you recommend this course?",('Yes','No'),key=classes)
+                
+                reviews_list.append(review)
+                recommend_list.append(recommend_or_not)
+            
+            review_final=st.radio('Are you sure about your reviews?',('No','Yes'))
+            if review_final=='Yes':
+                for index in range(len(recommend_list)):
+                    classes=review_or_no[index]
+                    out_1=json.dumps(reviews_list[index], indent=4)
+                    out_2=json.dumps(recommend_list[index], indent=4)
+                    
+                    response = requests.post('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Courses/'+str(classes)+'/Review.json',out_1)
+                    response = requests.post('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Courses/'+str(classes)+'/Recommend.json',out_2)
+
+    st.header('Personalized Course Recommendation')
+    st.write('Based on your background, class standing, and interests, you should take these courses next semester: ')
+    if class_standing=='Incomming Student' and waived_courses==['None']:
+        st.write('[DSCI 510, DSCI 549]')
+
+
+    st.header('Applied DSCI Community')
+    st.subheader('Reviews')
+    courses_list_final=['DSCI 510', 'DSCI 529', 'DSCI 544', 'DSCI 549', 'DSCI 550', 'CSCI 550', 'DSCI 551','DSCI 552','DSCI 553','DSCI 554','DSCI 555', 'DSCI 556', 'DSCI 558', 'DSCI 560','DSCI 561','DSCI 562', 'DSCI 564', 'CSCI 570', 'CSCI 572', 'CSCI 587', 'DSCI 599']
+    course=st.selectbox('Would you like to get reviews for any of these courses?', courses_list_final)
+    num=st.selectbox('How many random reviews would you like to receive?',[1,2,3,4,5])
+
+    st.write('This is what people have to say about '+str(course))
+    st.write(get_reviews(course,num))
+    try:
+        percent=how_many_recommend(course)
+        st.write(str(percent)+'% of MADVA users recommend this course')
+    except:
+        pass
+
+
+    st.subheader('Contacts')
+    course=st.selectbox('Would you like email addresses of fellow Applied DSCI students who have taken one of these courses?', courses_list_final)
+    num=st.selectbox('How many random email addresses would you like to receive?',[1,2,3,4,5])
+
+    st.write('Here are the contacts of those who have previously taken '+str(course))
+    st.write(get_emails(course,num))
+
+
                 
             
 
-            
-        st.write(data_2)
         
     
     #st.write('You selected: ', interests)
