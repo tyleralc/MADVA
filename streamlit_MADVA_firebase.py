@@ -12,6 +12,7 @@ import requests
 import json
 from bs4 import BeautifulSoup
 import random
+from PIL import Image
 
 def about_ADSCI():
     content = requests.get('https://catalogue.usc.edu/preview_program.php?catoid=14&poid=17593&returnto=5199')
@@ -233,21 +234,27 @@ def how_many_recommend(course):
     for resp in recs:
         if resp=='Yes':
             yes.append(resp)
-    return len(yes)/len(recs)*100
+    return round((len(yes)/len(recs)*100),2)
 
 def get_reviews(course,num):
     try:
         response = requests.get('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Courses/'+str(course)+'/Review/.json?orderBy="$key"').json()
         reviews=[]
         for values in response.values():
-            reviews.append(values)  
-        leng=len(reviews)
+            reviews.append(values)
+
+        res = []
+        for i in reviews:
+            if i not in res:
+                res.append(i)
+        leng=len(res)
+        #st.write(res)
         try:
             randomlist = random.sample(range(0, leng), num)
             
             for count,i in enumerate(randomlist):
                 count_disp=count+1
-                st.write(str(count_disp)+'. '+str(reviews[i]))
+                st.write(str(count_disp)+'. '+str(res[i]))
         except:
             st.write('Not enough info available!')
     except:
@@ -282,10 +289,10 @@ def main():
     functions = st.beta_container
     motiv = st.beta_container
 
-    st.image('MADVA.png')
-
-
     st.title('MADVA: Master\'s in Applied Data Science Vitual Advisor')
+
+    image=Image.open('MADVA.png')
+    st.image(image)
     st.subheader('By Tyler Alcorn and Chaimi Lee')
     st.write("This an app that helps USC students who are pursuing a Master's degree in Applied Data Science schedule and register for DSCI courses based on their interests and degree progress.")
 
@@ -402,7 +409,7 @@ def main():
                 all_courses.append(element)
         all_courses.append('None')
 
-        review_or_no=st.multiselect("Would you like to leave a review about any of these courses? If so, which courses would you like to write a review about?: ",all_courses,default=[all_courses[0]])
+        review_or_no=st.multiselect("Would you like to leave an anonymous review about any of these courses? If so, which courses would you like to write a review about?: ",all_courses,default=[all_courses[0]])
 
         if review_or_no!=['None']:
             if ('None' in review_or_no):
@@ -422,11 +429,13 @@ def main():
             if review_final=='Yes':
                 for index in range(len(recommend_list)):
                     classes=review_or_no[index]
-                    out_1=json.dumps(reviews_list[index], indent=4)
-                    out_2=json.dumps(recommend_list[index], indent=4)
+                    review_json={usc_email_key:reviews_list[index]}
+                    out_1=json.dumps(review_json, indent=4)
+                    recommend_json={usc_email_key:recommend_list[index]}
+                    out_2=json.dumps(recommend_json, indent=4)
                     
-                    response = requests.post('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Courses/'+str(classes)+'/Review.json',out_1)
-                    response = requests.post('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Courses/'+str(classes)+'/Recommend.json',out_2)
+                    response = requests.patch('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Courses/'+str(classes)+'/Review/.json',out_1)
+                    response = requests.patch('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Courses/'+str(classes)+'/Recommend/.json',out_2)
 
     st.header('Personalized Course Recommendation')
     st.write('Based on your background, class standing, and interests, you should take these courses next semester: ')
