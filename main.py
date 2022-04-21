@@ -5,7 +5,6 @@ from lxml import etree
 import requests
 import json
 from bs4 import BeautifulSoup
-import requests
 
 def about_ADSCI():
     content = requests.get('https://catalogue.usc.edu/preview_program.php?catoid=14&poid=17593&returnto=5199')
@@ -302,6 +301,7 @@ def main():
     list_of_interest=sorted(list_of_interest)
     interests=st.multiselect('What are your data science interests?', list_of_interest, default=['None'])
 
+    data_final=st.radio('Are all your inputs correct?',('No','Yes'))
     
     input_dict={}
     input_dict['Background']=background_info
@@ -310,10 +310,18 @@ def main():
     input_dict['Waived courses']=waived_courses
     input_dict['Courses taken']=courses_taken
     input_dict['Interests']=interests
-    data={}
-    data[usc_email]=input_dict
 
-    st.write(data)
+    if data_final=='Yes':
+        data={}
+        personal_data={}
+        usc_email_key=usc_email.replace('@usc.edu','')
+        personal_data[usc_email_key]=input_dict
+        data['USC Students']=personal_data
+        out=json.dumps(data, indent=4)
+        response = requests.patch('https://project-practice-8f9b2-default-rtdb.firebaseio.com/.json',out)
+        
+
+    #st.write(data)
 
     if class_standing!='Incomming Student':
         all_courses=[]
@@ -322,17 +330,33 @@ def main():
             for element in lists:
                 all_courses.append(element)
 
-        review_or_no=st.multiselect("Would you like to leave a review about any of these courses?: ",all_courses,default=[all_courses[0]])
+        review_or_no=st.multiselect("Would you like to leave a review about any of these courses? If so, which courses would you like to write a review about?: ",all_courses,default=[all_courses[0]])
+
+        data_2={}
+        dict_with_course={}
         for classes in review_or_no:
+    
             review_dict={}
-            outer_dict={}
             review=st.text_input("What did you think about "+str(classes)+"?")
             recommend_or_not=st.radio("Do you recommend this course?",('Yes','No'),key=classes)
+        
             review_dict['Review']=review
             review_dict['Recommend']=recommend_or_not
-            outer_dict[classes]=review_dict
-            all_reviews.append(outer_dict)
-        st.write(all_reviews)
+            dict_with_course[classes]=review_dict
+            
+            #all_reviews.append(data_2)
+        data_2['USC Courses']=dict_with_course
+
+        review_final=st.radio('Are you sure about your reviews?',('No','Yes'))
+        if review_final=='Yes':
+            out_2=json.dumps(data_2, indent=4)
+            response = requests.patch('https://project-practice-8f9b2-default-rtdb.firebaseio.com/.json',out_2)
+                ##make sure not to overwrite and just add new data
+                
+            
+
+            
+        st.write(data_2)
         
     
     #st.write('You selected: ', interests)

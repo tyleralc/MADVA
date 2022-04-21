@@ -10,16 +10,16 @@ print(churned_dict)
 
 def get_email(course_name):
 
-
+    has_taken_class=[]
     #get all the names of all_courses line 325 
+    if course_name in churned_dict['Courses taken']:
+        has_taken_class.append(course_name)
+    
+    #f'{}@usc.edu'
 
-
-    f'{}@usc.edu'
-
-
+    pass
 
 
     # get studets who have similiar interests to you 
 
 
-    
