@@ -282,6 +282,9 @@ def main():
     functions = st.beta_container
     motiv = st.beta_container
 
+    st.image('MADVA.png')
+
+
     st.title('MADVA: Master\'s in Applied Data Science Vitual Advisor')
     st.subheader('By Tyler Alcorn and Chaimi Lee')
     st.write("This an app that helps USC students who are pursuing a Master's degree in Applied Data Science schedule and register for DSCI courses based on their interests and degree progress.")
