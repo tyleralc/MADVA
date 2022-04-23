@@ -13,6 +13,7 @@ import json
 from bs4 import BeautifulSoup
 import random
 from PIL import Image
+import numpy as np
 
 def about_ADSCI():
     content = requests.get('https://catalogue.usc.edu/preview_program.php?catoid=14&poid=17593&returnto=5199')
@@ -270,8 +271,6 @@ def get_emails(course,num):
     leng=len(emails)
     try:
         randomlist = random.sample(range(0, leng), num)
-        print(randomlist)
-        print(emails)
         
         for count,i in enumerate(randomlist):
             count_disp=count+1
@@ -279,6 +278,134 @@ def get_emails(course,num):
             st.write(str(emails[i]))
     except:
         st.write('Not enough info available!')
+
+def jaccard(list1, list2):
+    intersection = len(list(set(list1).intersection(list2)))
+    union = (len(list1) + len(list2)) - intersection
+    return float(intersection) / union
+
+def intersection(lst1, lst2):
+    lst3 = [value for value in lst1 if value in lst2]
+    return lst3
+
+def get_similar_people(background,waived_courses,interests):
+    response = requests.get('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Students/.json?orderBy="$key"').json()
+    list1=['Data Science','Computer Science','Mathematics']
+    list2=['Engineering','Physics','Mathematics']
+    list3=['Economics/Finance','Business','Communications','Other']
+    
+    #get people who have waived or not waived courses (most important)
+    if waived_courses==['None']:
+        people=[]
+        for k,v in response.items():
+            if v.get("Waived courses")==['None']:
+                people.append(k)
+    else:
+        people=[]
+        for k,v in response.items():
+            if v.get("Waived courses")!=['None']:
+                people.append(k)
+    
+    #get people with similar backgrounds (second most important)
+    people_background=[]
+    for k,v in response.items():
+        if v.get("Background")==background:
+            people_background.append(k)
+
+    if len(people_background)<20:
+        if background in list1:
+            list1.remove(background)
+            similar_back=list1
+        elif background in list2:
+            list2.remove(background)
+            similar_back=list2
+        elif background in list3:
+            list3.remove(background)
+            similar_back=list3
+
+        for backgrounds in similar_back:
+            for k,v in response.items():
+                if v.get("Background")==backgrounds:
+                    people_background.append(k)
+        
+    #get people with similar interests
+    sim_interest_people=[]
+    jacard_sim=[]
+    for k,v in response.items():
+        list1=v['Interests']
+        jac_sim=jaccard(list1,interests)
+        jacard_sim.append((jac_sim,k))
+        if jac_sim>=0.75:
+            sim_interest_people.append(k)
+
+    jacard_sim_sorted=sorted(jacard_sim,reverse=True)      
+    if len(sim_interest_people)<40:
+        for tup in jacard_sim_sorted:
+            if tup[1] not in sim_interest_people:
+                sim_interest_people.append(tup[1])
+
+    try:
+        sim_interest_people=sim_interest_people[:20]
+    except:
+        pass
+    
+    #find union of all the people
+    first_intersect=intersection(people,people_background)
+    
+    final_people=intersection(first_intersect,sim_interest_people)
+    
+    if len(final_people)<20:
+        for people in people:
+            if people not in final_people:
+                final_people.append(people)
+                
+    return final_people
+
+def get_course_suggestion(class_standing,similar_people,all_courses,num): #similar_people=get_similar_people(background,waived_courses,interests):
+    response = requests.get('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Students/.json?orderBy="$key"').json()
+    if class_standing=='incomming student':
+        num_semester=1
+    elif class_standing == 'beyond 5th semester':
+        num_semester=7
+    else:
+        num_semester_str=str(class_standing)[:1]
+        num_semester=int(num_semester_str)+1
+        
+    courses=[]
+    for k,v in response.items():
+        if k in similar_people: #the list from above function
+            try:
+                list_of_courses_taken=v['Courses taken'][num_semester]
+                for element in list_of_courses_taken:
+                    courses.append(element)
+            except:
+                pass
+        #remove the courses user has taken already if its in the list
+    if 'None' in courses:
+        courses.remove('None')
+            
+    for element in courses:
+        if element in all_courses:
+            courses.remove(element)
+                    
+    course_counts={}
+    for course in courses:
+        if course not in course_counts:
+            course_counts[course]=1
+        else:
+            course_counts[course]=course_counts[course]+1
+                
+    final_list_tup=[]
+    for k,v in course_counts.items():
+            final_list_tup.append((v,k))
+        
+    final_list_total=sorted(final_list_tup, reverse=True)
+    final_list=final_list_total[:num]
+        
+        
+    for count,element in enumerate(final_list):
+        count_disp=count+1
+        st.write(str(count_disp)+'. '+str(element[1]))
 
 
 def main():
@@ -349,7 +476,7 @@ def main():
         grad_or_no='No'
 
     #waied courses
-    waived_courses=st.multiselect('Have you waived out of/got credit for any of these elective courses?', ['None','DSCI 510', 'DSCI 529', 'DSCI 544', 'DSCI 549', 'DSCI 550', 'CSCI 550', 'DSCI 554','DSCI 555', 'DSCI 556', 'DSCI 558', 'DSCI 560','DSCI 561','DSCI 562', 'DSCI 564', 'CSCI 570', 'CSCI 572', 'CSCI 587', 'DSCI 599','Other'])
+    waived_courses=st.multiselect('Have you waived out of/got credit for any of these elective courses? (If you have not waived out of any courses, please select None)', ['None','DSCI 510', 'DSCI 529', 'DSCI 544', 'DSCI 549', 'DSCI 550', 'CSCI 550', 'DSCI 554','DSCI 555', 'DSCI 556', 'DSCI 558', 'DSCI 560','DSCI 561','DSCI 562', 'DSCI 564', 'CSCI 570', 'CSCI 572', 'CSCI 587', 'DSCI 599','Other'])
 
     if class_standing=='1st Semester':
         courses_taken=first_sem()
@@ -438,19 +565,37 @@ def main():
                     response = requests.patch('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Courses/'+str(classes)+'/Recommend/.json',out_2)
 
     st.header('Personalized Course Recommendation')
+
+    num=st.selectbox('How many course suggestions would you like to receive?',[1,2,3])
     st.write('Based on your background, class standing, and interests, you should take these courses next semester: ')
     if class_standing=='Incomming Student' and waived_courses==['None']:
-        st.write('[DSCI 510, DSCI 549]')
+        if num==1:
+            st.write('1. DSCI 510')
+        elif num==2:
+            st.write('1. DSCI 510')
+            st.write('2. DSCI 549')
+        else:
+            st.write('1. DSCI 510')
+            st.write('2. DSCI 549')
+            st.write('3. None')
+    elif grad_or_no=='Yes':
+        st.write('Congratulations on graduating!')
+    else:
+        try:
+            similar_people=get_similar_people(background_info,waived_courses,interests)
+            st.write(get_course_suggestion(class_standing,similar_people,all_courses,num))
+        except:
+            st.write('Not enough information available')
 
 
     st.header('Applied DSCI Community')
     st.subheader('Reviews')
     courses_list_final=['DSCI 510', 'DSCI 529', 'DSCI 544', 'DSCI 549', 'DSCI 550', 'CSCI 550', 'DSCI 551','DSCI 552','DSCI 553','DSCI 554','DSCI 555', 'DSCI 556', 'DSCI 558', 'DSCI 560','DSCI 561','DSCI 562', 'DSCI 564', 'CSCI 570', 'CSCI 572', 'CSCI 587', 'DSCI 599']
     course=st.selectbox('Would you like to get reviews for any of these courses?', courses_list_final)
-    num=st.selectbox('How many random reviews would you like to receive?',[1,2,3,4,5])
+    num1=st.selectbox('How many random reviews would you like to receive?',[1,2,3,4,5])
 
     st.write('This is what people have to say about '+str(course))
-    st.write(get_reviews(course,num))
+    st.write(get_reviews(course,num1))
     try:
         percent=how_many_recommend(course)
         st.write(str(percent)+'% of MADVA users recommend this course')
