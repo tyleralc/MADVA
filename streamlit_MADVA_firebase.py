@@ -7,13 +7,13 @@
 import streamlit as st
 import pandas as pd
 import sys
-from lxml import etree
+#from lxml import etree
 import requests
 import json
 from bs4 import BeautifulSoup
 import random
 from PIL import Image
-import numpy as np
+#import numpy as np
 
 def about_ADSCI():
     content = requests.get('https://catalogue.usc.edu/preview_program.php?catoid=14&poid=17593&returnto=5199')
