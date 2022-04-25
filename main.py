@@ -1,10 +1,13 @@
 import streamlit as st
 import pandas as pd
 import sys
-from lxml import etree
+# from lxml import etree
 import requests
 import json
 from bs4 import BeautifulSoup
+import random
+from PIL import Image
+# import numpy as np
 
 def about_ADSCI():
     content = requests.get('https://catalogue.usc.edu/preview_program.php?catoid=14&poid=17593&returnto=5199')
@@ -100,7 +103,6 @@ def course_info_dict(year,semester,subject,pandas_df):
 
     course_info=soup.find_all("div", class_="course-details")
 
-
     course_info_list=[]
     for course_element in course_info:
         info=course_element.find("div", class_="catalogue")
@@ -111,8 +113,8 @@ def course_info_dict(year,semester,subject,pandas_df):
     course_info_dict={}
 
     for index in range(len(list_of_courses)):
-        course_info_dict[list_of_courses[index]]=course_info_list[index]
-        
+        course_info_dict[list_of_courses[index]]=course_info_list[index]  
+
     return course_info_dict
 
 def first_sem():
@@ -120,7 +122,6 @@ def first_sem():
     courses_list_indiv=['None','DSCI 510', 'DSCI 529', 'DSCI 544', 'DSCI 549', 'DSCI 550', 'CSCI 550', 'DSCI 551','DSCI 552','DSCI 553','DSCI 554','DSCI 555', 'DSCI 556', 'DSCI 558', 'DSCI 560','DSCI 561','DSCI 562', 'DSCI 564', 'CSCI 570', 'CSCI 572', 'CSCI 587', 'DSCI 599','Other']
     courses_taken_1=st.multiselect('Which DSCI/CSCI courses have you taken during your first semester?',courses_list_indiv, default=['None'])
     courses_taken_dict[1]=courses_taken_1
-    
     return courses_taken_dict
 
 def second_sem():
@@ -128,10 +129,6 @@ def second_sem():
     courses_list_indiv=['None','DSCI 510', 'DSCI 529', 'DSCI 544', 'DSCI 549', 'DSCI 550', 'CSCI 550', 'DSCI 551','DSCI 552','DSCI 553','DSCI 554','DSCI 555', 'DSCI 556', 'DSCI 558', 'DSCI 560','DSCI 561','DSCI 562', 'DSCI 564', 'CSCI 570', 'CSCI 572', 'CSCI 587', 'DSCI 599','Other']
     courses_taken_1=st.multiselect('Which DSCI/CSCI courses have you taken during your first semester?',courses_list_indiv, default=['None'])
     courses_taken_dict[1]=courses_taken_1
-
-    #for element in courses_taken_1:
-       # if element != 'Other' or element != 'None':
-           # courses_list_indiv.remove(element)
     courses_taken_2=st.multiselect('Which DSCI/CSCI courses have you taken during your second semester?',courses_list_indiv, default=['None'])
     courses_taken_dict[2]=courses_taken_2
     return courses_taken_dict
@@ -140,16 +137,11 @@ def third_sem():
     courses_taken_dict={}
     courses_list_indiv=['None','DSCI 510', 'DSCI 529', 'DSCI 544', 'DSCI 549', 'DSCI 550', 'CSCI 550', 'DSCI 551','DSCI 552','DSCI 553','DSCI 554','DSCI 555', 'DSCI 556', 'DSCI 558', 'DSCI 560','DSCI 561','DSCI 562', 'DSCI 564', 'CSCI 570', 'CSCI 572', 'CSCI 587', 'DSCI 599','Other']
     courses_taken_1=st.multiselect('Which DSCI/CSCI courses have you taken during your first semester?',courses_list_indiv, default=['None'])
-    courses_taken_dict[1]=courses_taken_1
-
-            
+    courses_taken_dict[1]=courses_taken_1 
     courses_taken_2=st.multiselect('Which DSCI/CSCI courses have you taken during your second semester?',courses_list_indiv, default=['None'])
-    courses_taken_dict[2]=courses_taken_2
-
-            
+    courses_taken_dict[2]=courses_taken_2  
     courses_taken_3=st.multiselect('Which DSCI/CSCI courses have you taken during your third semester?',courses_list_indiv, default=['None'])
     courses_taken_dict[3]=courses_taken_3
-    
     return courses_taken_dict
 
 def fourth_sem():
@@ -157,39 +149,27 @@ def fourth_sem():
     courses_list_indiv=['None','DSCI 510', 'DSCI 529', 'DSCI 544', 'DSCI 549', 'DSCI 550', 'CSCI 550', 'DSCI 551','DSCI 552','DSCI 553','DSCI 554','DSCI 555', 'DSCI 556', 'DSCI 558', 'DSCI 560','DSCI 561','DSCI 562', 'DSCI 564', 'CSCI 570', 'CSCI 572', 'CSCI 587', 'DSCI 599','Other']
     courses_taken_1=st.multiselect('Which DSCI/CSCI courses have you taken during your first semester?',courses_list_indiv, default=['None'])
     courses_taken_dict[1]=courses_taken_1
-
-            
     courses_taken_2=st.multiselect('Which DSCI/CSCI courses have you taken during your second semester?',courses_list_indiv, default=['None'])
     courses_taken_dict[2]=courses_taken_2
-
-            
     courses_taken_3=st.multiselect('Which DSCI/CSCI courses have you taken during your third semester?',courses_list_indiv, default=['None'])
-    courses_taken_dict[3]=courses_taken_3
-            
+    courses_taken_dict[3]=courses_taken_3    
     courses_taken_4=st.multiselect('Which DSCI/CSCI courses have you taken during your fourth semester?',courses_list_indiv, default=['None'])
     courses_taken_dict[4]=courses_taken_4   
-    
     return courses_taken_dict
 
 def fifth_sem():
     courses_taken_dict={}
     courses_list_indiv=['None','DSCI 510', 'DSCI 529', 'DSCI 544', 'DSCI 549', 'DSCI 550', 'CSCI 550', 'DSCI 551','DSCI 552','DSCI 553','DSCI 554','DSCI 555', 'DSCI 556', 'DSCI 558', 'DSCI 560','DSCI 561','DSCI 562', 'DSCI 564', 'CSCI 570', 'CSCI 572', 'CSCI 587', 'DSCI 599','Other']
     courses_taken_1=st.multiselect('Which DSCI/CSCI courses have you taken during your first semester?',courses_list_indiv, default=['None'])
-    courses_taken_dict[1]=courses_taken_1
-            
+    courses_taken_dict[1]=courses_taken_1     
     courses_taken_2=st.multiselect('Which DSCI/CSCI courses have you taken during your second semester?',courses_list_indiv, default=['None'])
-    courses_taken_dict[2]=courses_taken_2
-            
+    courses_taken_dict[2]=courses_taken_2    
     courses_taken_3=st.multiselect('Which DSCI/CSCI courses have you taken during your third semester?',courses_list_indiv, default=['None'])
-    courses_taken_dict[3]=courses_taken_3
-            
+    courses_taken_dict[3]=courses_taken_3   
     courses_taken_4=st.multiselect('Which DSCI/CSCI courses have you taken during your fourth semester?',courses_list_indiv, default=['None'])
     courses_taken_dict[4]=courses_taken_4 
-
-    
     courses_taken_5=st.multiselect('Which DSCI/CSCI courses have you taken during your fifth semester?',courses_list_indiv, default=['None'])
     courses_taken_dict[5]=courses_taken_5
-    
     return courses_taken_dict
 
 def beyond_fifth_sem():
@@ -216,21 +196,208 @@ def beyond_fifth_sem():
     
     return courses_taken_dict
 
+#get percentage of people who recommend a course
+def how_many_recommend(course):
+    response = requests.get('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Courses/'+str(course)+'/Recommend/.json?orderBy="$key"').json()
+    recs=[]
+    yes=[]
+    for values in response.values():
+        recs.append(values)
+    for resp in recs:
+        if resp=='Yes':
+            yes.append(resp)
+    return round((len(yes)/len(recs)*100),2)
+
+def get_reviews(course,num):
+    try:
+        response = requests.get('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Courses/'+str(course)+'/Review/.json?orderBy="$key"').json()
+        reviews=[]
+        for values in response.values():
+            reviews.append(values)
+
+        res = []
+        for i in reviews:
+            if i not in res:
+                res.append(i)
+        leng=len(res)
+        #st.write(res)
+        try:
+            randomlist = random.sample(range(0, leng), num)
+            
+            for count,i in enumerate(randomlist):
+                count_disp=count+1
+                st.write(str(count_disp)+'. '+str(res[i]))
+        except:
+            st.write('Not enough info available!')
+    except:
+        st.write('Not enough info available!')
+
+def get_emails(course,num):
+    response = requests.get('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Students/.json?orderBy="$key"').json()
+    emails=[]
+    for key,dictionary in response.items():
+        email=key+'@usc.edu'
+        if course in dictionary['Courses Total']:
+            emails.append(email)
+    leng=len(emails)
+    try:
+        randomlist = random.sample(range(0, leng), num)
+        
+        for count,i in enumerate(randomlist):
+            count_disp=count+1
+            #print(str(count_disp))
+            st.write(str(emails[i]))
+    except:
+        st.write('Not enough info available!')
+
+def jaccard(list1, list2):
+    intersection = len(list(set(list1).intersection(list2)))
+    union = (len(list1) + len(list2)) - intersection
+    return float(intersection) / union
+
+def intersection(lst1, lst2):
+    lst3 = [value for value in lst1 if value in lst2]
+    return lst3
+
+def get_similar_people(background,waived_courses,interests):
+    response = requests.get('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Students/.json?orderBy="$key"').json()
+    list1=['Data Science','Computer Science','Mathematics']
+    list2=['Engineering','Physics','Mathematics']
+    list3=['Economics/Finance','Business','Communications','Other']
+    
+    #get people who have waived or not waived courses (most important)
+    if waived_courses==['None']:
+        people=[]
+        for k,v in response.items():
+            if v.get("Waived courses")==['None']:
+                people.append(k)
+    else:
+        people=[]
+        for k,v in response.items():
+            if v.get("Waived courses")!=['None']:
+                people.append(k)
+    
+    #get people with similar backgrounds (second most important)
+    people_background=[]
+    for k,v in response.items():
+        if v.get("Background")==background:
+            people_background.append(k)
+
+    if len(people_background)<20:
+        if background in list1:
+            list1.remove(background)
+            similar_back=list1
+        elif background in list2:
+            list2.remove(background)
+            similar_back=list2
+        elif background in list3:
+            list3.remove(background)
+            similar_back=list3
+
+        for backgrounds in similar_back:
+            for k,v in response.items():
+                if v.get("Background")==backgrounds:
+                    people_background.append(k)
+        
+    #get people with similar interests
+    sim_interest_people=[]
+    jacard_sim=[]
+    for k,v in response.items():
+        list1=v['Interests']
+        jac_sim=jaccard(list1,interests)
+        jacard_sim.append((jac_sim,k))
+        if jac_sim>=0.75:
+            sim_interest_people.append(k)
+
+    jacard_sim_sorted=sorted(jacard_sim,reverse=True)      
+    if len(sim_interest_people)<40:
+        for tup in jacard_sim_sorted:
+            if tup[1] not in sim_interest_people:
+                sim_interest_people.append(tup[1])
+
+    try:
+        sim_interest_people=sim_interest_people[:20]
+    except:
+        pass
+    
+    #find union of all the people
+    first_intersect=intersection(people,people_background)
+    
+    final_people=intersection(first_intersect,sim_interest_people)
+    
+    if len(final_people)<20:
+        for people in first_intersect:
+            if people not in final_people:
+                final_people.append(people)
+    if len(final_people)<20:
+        for people in people:
+            if people not in final_people:
+                final_people.append(people)
+                
+    return final_people
+
+def get_course_suggestion(class_standing,similar_people,all_courses,waived_courses,num): #similar_people=get_similar_people(background,waived_courses,interests):
+    response = requests.get('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Students/.json?orderBy="$key"').json()
+    if class_standing=='incomming student':
+        num_semester=1
+    elif class_standing == 'beyond 5th semester':
+        num_semester=7
+    else:
+        num_semester_str=str(class_standing)[:1]
+        num_semester=int(num_semester_str)+1
+        
+    courses=[]
+    for k,v in response.items():
+        if k in similar_people: #the list from above function
+            try:
+                list_of_courses_taken=v['Courses taken'][num_semester]
+                for element in list_of_courses_taken:
+                    courses.append(element)
+            except:
+                pass
+        #remove the courses user has taken already if its in the list
+    if 'None' in courses:
+        courses.remove('None')
+            
+    for element in courses:
+        if element in all_courses:
+            courses.remove(element)
+    for element in courses:
+        if element in waived_courses:
+            courses.remove(element)
+                    
+    course_counts={}
+    for course in courses:
+        if course not in course_counts:
+            course_counts[course]=1
+        else:
+            course_counts[course]=course_counts[course]+1
+                
+    final_list_tup=[]
+    for k,v in course_counts.items():
+            final_list_tup.append((v,k))
+        
+    final_list_total=sorted(final_list_tup, reverse=True)
+    final_list=final_list_total[:num]
+        
+        
+    for count,element in enumerate(final_list):
+        count_disp=count+1
+        st.write(str(count_disp)+'. '+str(element[1]))
+
 
 def main():
-    header= st.beta_container
-    usc_courses = st.beta_container
-    road_map= st.beta_container
-    professors =st.beta_container
-    functions = st.beta_container
-    motiv = st.beta_container
+ 
+    st.title('MADVA: Master\'s in Applied Data Science Virtual Advisor')
 
-    st.title('MADVA: Master\'s in Applied Data Science Vitual Advisor')
+    image=Image.open('MADVA.png')
+    st.image(image)
     st.subheader('By Tyler Alcorn and Chaimi Lee')
     st.write("This an app that helps USC students who are pursuing a Master's degree in Applied Data Science schedule and register for DSCI courses based on their interests and degree progress.")
 
     st.subheader("Motivations")
     st.write("Our motivation for creating MADVA (Master's in Applied Data science Virtual Advisor) was to help our fellow Applied Data Science students avoid these obstacles and better prepare ourselves for the coming semester and achieve our career goals. This app would significantly reduce stress during registration periods and help students plan future courses based on their interests and other students\' experiences. This app would also be helpful for students who have less flexible schedules due to jobs, being in a different time zone, etc. With MADVA, our goal is to ensure that current and future DSCI students make the best out of their educational journey at USC.")
+
 
     st.subheader('MS in Applied Data Science at USC')
     st.write(about_ADSCI())
@@ -279,7 +446,7 @@ def main():
         grad_or_no='No'
 
     #waied courses
-    waived_courses=st.multiselect('Have you waived out of/got credit for any of these elective courses?', ['None','DSCI 510', 'DSCI 529', 'DSCI 544', 'DSCI 549', 'DSCI 550', 'CSCI 550', 'DSCI 554','DSCI 555', 'DSCI 556', 'DSCI 558', 'DSCI 560','DSCI 561','DSCI 562', 'DSCI 564', 'CSCI 570', 'CSCI 572', 'CSCI 587', 'DSCI 599','Other'])
+    waived_courses=st.multiselect('Have you waived out of/got credit for any of these elective courses? (If you have not waived out of any courses, please select None)', ['None','DSCI 510', 'DSCI 529', 'DSCI 544', 'DSCI 549', 'DSCI 550', 'CSCI 550', 'DSCI 554','DSCI 555', 'DSCI 556', 'DSCI 558', 'DSCI 560','DSCI 561','DSCI 562', 'DSCI 564', 'CSCI 570', 'CSCI 572', 'CSCI 587', 'DSCI 599','Other'])
 
     if class_standing=='1st Semester':
         courses_taken=first_sem()
@@ -310,55 +477,102 @@ def main():
     input_dict['Waived courses']=waived_courses
     input_dict['Courses taken']=courses_taken
     input_dict['Interests']=interests
-
+    all_courses=[]
+    for lists in input_dict["Courses taken"].values():
+        for element in lists:
+            all_courses.append(element)
+    input_dict['Courses Total']=all_courses
+        
     if data_final=='Yes':
         data={}
         personal_data={}
         usc_email_key=usc_email.replace('@usc.edu','')
         personal_data[usc_email_key]=input_dict
-        data['USC Students']=personal_data
-        out=json.dumps(data, indent=4)
-        response = requests.patch('https://project-practice-8f9b2-default-rtdb.firebaseio.com/.json',out)
+        ##this is onl for creating the first key
+        #data['USC_Students']=personal_data
+        #out=json.dumps(data, indent=4)
+        out=json.dumps(personal_data, indent=4)
+        response = requests.patch('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Students.json',out)
         
-
-    #st.write(data)
-
     if class_standing!='Incomming Student':
         all_courses=[]
         all_reviews=[]
         for lists in input_dict["Courses taken"].values():
             for element in lists:
                 all_courses.append(element)
+        all_courses.append('None')
 
-        review_or_no=st.multiselect("Would you like to leave a review about any of these courses? If so, which courses would you like to write a review about?: ",all_courses,default=[all_courses[0]])
+        review_or_no=st.multiselect("Would you like to leave an anonymous review about any of these courses? If so, which courses would you like to write a review about?: ",all_courses,default=[all_courses[0]])
 
-        data_2={}
-        dict_with_course={}
-        for classes in review_or_no:
-    
-            review_dict={}
-            review=st.text_input("What did you think about "+str(classes)+"?")
-            recommend_or_not=st.radio("Do you recommend this course?",('Yes','No'),key=classes)
-        
-            review_dict['Review']=review
-            review_dict['Recommend']=recommend_or_not
-            dict_with_course[classes]=review_dict
-            
-            #all_reviews.append(data_2)
-        data_2['USC Courses']=dict_with_course
+        if review_or_no!=['None']:
+            if ('None' in review_or_no):
+                review_or_no.remove('None')
 
-        review_final=st.radio('Are you sure about your reviews?',('No','Yes'))
-        if review_final=='Yes':
-            out_2=json.dumps(data_2, indent=4)
-            response = requests.patch('https://project-practice-8f9b2-default-rtdb.firebaseio.com/.json',out_2)
-                ##make sure not to overwrite and just add new data
+            reviews_list=[]
+            recommend_list=[]
+            for classes in review_or_no:
                 
+                review=st.text_input("What did you think about "+str(classes)+"?")
+                recommend_or_not=st.radio("Do you recommend this course?",('Yes','No'),key=classes)
+                
+                reviews_list.append(review)
+                recommend_list.append(recommend_or_not)
             
+            review_final=st.radio('Are you sure about your reviews?',('No','Yes'))
+            if review_final=='Yes':
+                for index in range(len(recommend_list)):
+                    classes=review_or_no[index]
+                    review_json={usc_email_key:reviews_list[index]}
+                    out_1=json.dumps(review_json, indent=4)
+                    recommend_json={usc_email_key:recommend_list[index]}
+                    out_2=json.dumps(recommend_json, indent=4)
+                    
+                    response = requests.patch('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Courses/'+str(classes)+'/Review/.json',out_1)
+                    response = requests.patch('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Courses/'+str(classes)+'/Recommend/.json',out_2)
 
-            
-        st.write(data_2)
-        
-    
-    #st.write('You selected: ', interests)
+    st.header('Personalized Course Recommendation')
+    usc_email_key=usc_email.replace('@usc.edu','')
+    num=st.selectbox('How many course suggestions would you like to receive?',[1,2,3])
+    st.write('Based on your background, class standing, and interests, you should take these courses next semester: ')
+    if class_standing=='Incomming Student' and waived_courses==['None']:
+        if num==1:
+            st.write('1. DSCI 510')
+        elif num==2:
+            st.write('1. DSCI 510')
+            st.write('2. DSCI 549')
+        else:
+            st.write('1. DSCI 510')
+            st.write('2. DSCI 549')
+            st.write('3. None')
+    elif grad_or_no=='Yes':
+        st.write('Congratulations on graduating!')
+    else:
+        try:
+            similar_people=get_similar_people(background_info,waived_courses,interests)
+            st.write(get_course_suggestion(class_standing,similar_people,all_courses,waived_courses,num))
+        except:
+            st.write('Not enough information available')
+
+    st.header('Applied DSCI Community')
+    st.subheader('Reviews')
+    courses_list_final=['DSCI 510', 'DSCI 529', 'DSCI 544', 'DSCI 549', 'DSCI 550', 'CSCI 550', 'DSCI 551','DSCI 552','DSCI 553','DSCI 554','DSCI 555', 'DSCI 556', 'DSCI 558', 'DSCI 560','DSCI 561','DSCI 562', 'DSCI 564', 'CSCI 570', 'CSCI 572', 'CSCI 587', 'DSCI 599']
+    course=st.selectbox('Would you like to get reviews for any of these courses?', courses_list_final)
+    num1=st.selectbox('How many random reviews would you like to receive?',[1,2,3,4,5])
+
+    st.write('This is what people have to say about '+str(course))
+    st.write(get_reviews(course,num1))
+    try:
+        percent=how_many_recommend(course)
+        st.write(str(percent)+'% of MADVA users recommend this course')
+    except:
+        pass
+
+    st.subheader('Contacts')
+    course=st.selectbox('Would you like email addresses of fellow Applied DSCI students who have taken one of these courses?', courses_list_final)
+    num=st.selectbox('How many random email addresses would you like to receive?',[1,2,3,4,5])
+
+    st.write('Here are the contacts of those who have previously taken '+str(course))
+    st.write(get_emails(course,num))
+
 if __name__ == '__main__':
     main()
