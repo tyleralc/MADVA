@@ -355,13 +355,17 @@ def get_similar_people(background,waived_courses,interests):
     final_people=intersection(first_intersect,sim_interest_people)
     
     if len(final_people)<20:
+        for people in first_intersect:
+            if people not in final_people:
+                final_people.append(people)
+    if len(final_people)<20:
         for people in people:
             if people not in final_people:
                 final_people.append(people)
                 
     return final_people
 
-def get_course_suggestion(class_standing,similar_people,all_courses,num): #similar_people=get_similar_people(background,waived_courses,interests):
+def get_course_suggestion(class_standing,similar_people,all_courses,waived_courses,num): #similar_people=get_similar_people(background,waived_courses,interests):
     response = requests.get('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Students/.json?orderBy="$key"').json()
     if class_standing=='incomming student':
         num_semester=1
@@ -386,6 +390,9 @@ def get_course_suggestion(class_standing,similar_people,all_courses,num): #simil
             
     for element in courses:
         if element in all_courses:
+            courses.remove(element)
+    for element in courses:
+        if element in waived_courses:
             courses.remove(element)
                     
     course_counts={}
@@ -416,7 +423,7 @@ def main():
     functions = st.beta_container
     motiv = st.beta_container
 
-    st.title('MADVA: Master\'s in Applied Data Science Vitual Advisor')
+    st.title('MADVA: Master\'s in Applied Data Science Virtual Advisor')
 
     image=Image.open('MADVA.png')
     st.image(image)
@@ -565,7 +572,7 @@ def main():
                     response = requests.patch('https://project-practice-8f9b2-default-rtdb.firebaseio.com/USC_Courses/'+str(classes)+'/Recommend/.json',out_2)
 
     st.header('Personalized Course Recommendation')
-
+    usc_email_key=usc_email.replace('@usc.edu','')
     num=st.selectbox('How many course suggestions would you like to receive?',[1,2,3])
     st.write('Based on your background, class standing, and interests, you should take these courses next semester: ')
     if class_standing=='Incomming Student' and waived_courses==['None']:
@@ -583,7 +590,7 @@ def main():
     else:
         try:
             similar_people=get_similar_people(background_info,waived_courses,interests)
-            st.write(get_course_suggestion(class_standing,similar_people,all_courses,num))
+            st.write(get_course_suggestion(class_standing,similar_people,all_courses,waived_courses,num))
         except:
             st.write('Not enough information available')
 
