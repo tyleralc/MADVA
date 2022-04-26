@@ -327,11 +327,7 @@ def get_similar_people(background,waived_courses,interests):
         for people in first_intersect:
             if people not in final_people:
                 final_people.append(people)
-    # if len(final_people)<20:
-    #     for people in people:
-    #         if people not in final_people:
-    #             final_people.append(people)
-                
+            
     return final_people
 
 def get_course_suggestion(class_standing,similar_people,all_courses,waived_courses,num): #similar_people=get_similar_people(background,waived_courses,interests):
@@ -355,20 +351,6 @@ def get_course_suggestion(class_standing,similar_people,all_courses,waived_cours
                 pass
         #remove the courses user has taken already if its in the list
 
-
-    #if 'None' in courses:
-    #courses.remove('None')
-
-     # for element in courses:
-    #     if element in all_courses:
-    #         courses.remove(element)
-    # for element in courses:
-    #     if element in waived_courses:
-    #         courses.remove(element)
-
-
-
-
     valueToBeRemoved='None'
     courses = [value for value in courses if value != valueToBeRemoved]
     
@@ -381,12 +363,6 @@ def get_course_suggestion(class_standing,similar_people,all_courses,waived_cours
       if element in courses:
         valueToBeRemoved=element
         courses = [value for value in courses if value != valueToBeRemoved]
-
-            
-   
-
-
-
 
     course_counts={}
     for course in courses:
@@ -401,12 +377,6 @@ def get_course_suggestion(class_standing,similar_people,all_courses,waived_cours
         
     final_list_total=sorted(final_list_tup, reverse=True)
     final_list=final_list_total[:num]
-        
-        
-    # for count,element in enumerate(final_list):
-    #     count_disp=count+1
-    #     st.write(str(count_disp)+'. '+str(element[1]))
-
 
     if len(final_list_total)<num:
         st.write('Not enough information available')
@@ -414,12 +384,6 @@ def get_course_suggestion(class_standing,similar_people,all_courses,waived_cours
         for count,element in enumerate(final_list):
             count_disp=count+1
             st.write(str(count_disp)+'. '+str(element[1]))
-
-
-
-
-
-
 
 def main():
  
