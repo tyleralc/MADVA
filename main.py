@@ -403,9 +403,22 @@ def get_course_suggestion(class_standing,similar_people,all_courses,waived_cours
     final_list=final_list_total[:num]
         
         
-    for count,element in enumerate(final_list):
-        count_disp=count+1
-        st.write(str(count_disp)+'. '+str(element[1]))
+    # for count,element in enumerate(final_list):
+    #     count_disp=count+1
+    #     st.write(str(count_disp)+'. '+str(element[1]))
+
+
+    if len(final_list_total)<num:
+        st.write('Not enough information available')
+    else:
+        for count,element in enumerate(final_list):
+            count_disp=count+1
+            st.write(str(count_disp)+'. '+str(element[1]))
+
+
+
+
+
 
 
 def main():
