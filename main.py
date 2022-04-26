@@ -354,16 +354,40 @@ def get_course_suggestion(class_standing,similar_people,all_courses,waived_cours
             except:
                 pass
         #remove the courses user has taken already if its in the list
-    if 'None' in courses:
-        courses.remove('None')
+
+
+    #if 'None' in courses:
+    #courses.remove('None')
+
+     # for element in courses:
+    #     if element in all_courses:
+    #         courses.remove(element)
+    # for element in courses:
+    #     if element in waived_courses:
+    #         courses.remove(element)
+
+
+
+
+    valueToBeRemoved='None'
+    courses = [value for value in courses if value != valueToBeRemoved]
+    
+    for element in all_courses:
+      if element in courses:
+        valueToBeRemoved=element
+        courses = [value for value in courses if value != valueToBeRemoved]
+    
+    for element in waived_courses:
+      if element in courses:
+        valueToBeRemoved=element
+        courses = [value for value in courses if value != valueToBeRemoved]
+
             
-    for element in courses:
-        if element in all_courses:
-            courses.remove(element)
-    for element in courses:
-        if element in waived_courses:
-            courses.remove(element)
-                    
+   
+
+
+
+
     course_counts={}
     for course in courses:
         if course not in course_counts:
