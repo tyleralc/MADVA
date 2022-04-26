@@ -327,10 +327,10 @@ def get_similar_people(background,waived_courses,interests):
         for people in first_intersect:
             if people not in final_people:
                 final_people.append(people)
-    if len(final_people)<20:
-        for people in people:
-            if people not in final_people:
-                final_people.append(people)
+    # if len(final_people)<20:
+    #     for people in people:
+    #         if people not in final_people:
+    #             final_people.append(people)
                 
     return final_people
 
