@@ -439,7 +439,7 @@ def main():
                                                                      '1st Semester', '2nd Semester', '3rd Semester',
                                                                      '4th Semester', '5th Semester', 'Beyond 5th Semester'))
 
-    if class_standing=='3rd Semester'or class_standing=='4th Semester' or class_standing=='5th semester' or class_standing=='beyond 5th semester':
+    if class_standing=='3rd Semester'or class_standing=='4th Semester' or class_standing=='5th Semester' or class_standing=='beyond 5th Semester':
         grad_or_no=st.radio('Will you be graduating after this semester?', ('Yes', 'No'))
     else:
         grad_or_no='No'
